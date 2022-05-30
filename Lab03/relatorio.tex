@@ -1,0 +1,345 @@
+\documentclass[a4paper,12pt,oneside]{article}
+\usepackage[lmargin=3cm, tmargin=3cm, rmargin=2cm, rmargin=2cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{xcolor,calc}
+\usepackage{titlesec,blindtext,color}
+\usepackage[size=footnotesize,labelsep=endash]{caption}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{pslatex}
+\usepackage{verbatim}
+\usepackage{enumitem,xcolor}
+\usepackage[portuguese]{babel}
+\usepackage{steinmetz}
+\usepackage{multirow}
+% -------------------------------------------------------------------------------------
+
+\captionsetup[figure]{labelfont=bf} % Configura a palavra "Figura" das legendas das imagens em negrito
+\captionsetup[table]{labelfont=bf}  % Configura a palavra "Tabela" das legendas das tabelas em negrito
+
+% -------------------------------------------------------------------------------------
+
+\definecolor{Azul}{HTML}{00508F}    % Define a cor Azul
+\definecolor{gray75}{gray}{0.75}    % Define a cor Cinza
+\definecolor{Cinza}{HTML}{999999}   % Define uma segunda tonalidade de cinza
+
+% -------------------------------------------------------------------------------------
+
+%------------------------------------------------------------------------------------
+
+\hypersetup{%
+pdftitle={Relatório 3 - Máquinas Elétricas},%
+pdfauthor={Rafael Dias Pereira},%
+pdfsubject={MQE},%
+%pdfkeywords={Magnético, acoplados},%
+}%
+
+\onehalfspacing
+\graphicspath{{Imagens/}} % Especifica que todas as imagens estão dentro da sub-pasta "Imagens" 
+
+% -------------------------------------------------------------------------------------
+
+\newcommand{\hsp}{\hspace{10pt}}
+\titleformat{\chapter}[hang]{\Huge\bfseries\color{Azul}}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
+\titleformat{\section}[hang]{\Huge\bfseries\color{Azul}}{\textcolor{gray75}{}}{0pt}{\Huge\bfseries}
+\titleformat{\subsection}[hang]{\large\bfseries\color{Azul}}{}{0pt}{\Large\bfseries}
+\titleformat*{\subsubsection}{\normalsize\bfseries\color{Azul}}
+
+
+% -------------------------------------------------------------------------------------
+
+\DeclareMathOperator{\argmax}{arg\,max} % thin space, limits on side in displays
+
+% -------------------------------------------------------------------------------------
+
+\begin{document}
+\thispagestyle{empty}\pagenumbering{alph}
+
+\begin{center}
+\begin{figure}\centering
+\includegraphics[scale=0.2]{Logo1.png}
+\end{figure}\*
+
+
+\vspace{5cm}
+
+{\Large\bfseries 
+Laboratório de Máquinas Elétricas}
+
+\vspace{0.5cm}
+
+{\Large\bfseries 
+Relatório 3}
+\end{center}
+
+\vspace{8cm}
+
+\noindent{\bfseries Aluno:} Ana Carolina Coelho Robl \hfill {\bfseries nº de matrícula:} 12011EAU021
+
+\noindent{\bfseries Aluno:} André Felipe da Cunha Garcia \hfill {\bfseries nº de matrícula:} 11611EAU006
+
+\noindent{\bfseries Aluno:} Rafael Dias Pereira \hfill {\bfseries nº de matrícula:} 11911EAU003
+
+\noindent{\bfseries Professor:} Augusto W. Fleury
+
+\vfill
+\begin{center}
+\large \today
+\end{center}
+
+
+
+\newpage
+\tableofcontents\newpage
+%\listoffigures\newpage
+%\listoftables\newpage
+\pagenumbering{arabic}
+
+\section{Objetivos}\hspace{0pt}
+
+Neste trabalho, estudaremos o motor de indução trifásico (MIT), amplamente utilizado no setor industrial. Dentre suas funcionalidades e configurações, iremos operar com o motor a vazio e assim determinar experimentalmente os valores de perdas e do fluxo de potência, bem como as reatâncias de magnetização e dispersão do motor.
+
+\newpage
+\section{Introdução}\hspace{0pt}
+
+No que se trata de máquinas elétricas, denomina-se motor elétrico todo dispositivo capaz de transformar energia elétrica em energia mecânica, sendo um processo complexo onde se utiliza princípios do eletromagnetismo para seu acontecimento. A grosso modo, ao absorver uma certa quantidade de energia elétrica, em troca, o motor é capaz de mover ou acionar uma carga.
+
+Dentre os tipos de motores, o elétrico é o mais utilizado devido as suas diversas vantagens em relação aos demais, sendo elas seu baixo custo, fácil transporte, baixa ou nula emissão de poluentes, entrega de "força" em tempo muito reduzido (em relação ao motor a combustão por exemplo), baixo ruído, entre outras.
+
+Existem motores elétricos de corrente contínua (CC) e corrente alternada (CA). Nos motores CC, existe a necessidade de um circuito retificador para converter a tensão alternada para alimentar o mesmo, tendo a característica de um fácil ajuste de velocidade com limites amplos, resulta em uma aplicação mais restrita a casos especiais onde valha a pena (mesmo com seu custo mais elevado). Já nos motores CA, determina-se a velocidade através da frequência de tensão e corrente, onde a velocidade pode ser alterado apenas com a variação dessa frequência. Em resumo, os motores CA são os mais utilizados devido a seu baixo custo, simplicidade, economia e robustez, sendo o setor industrial seu principal utilizador. 
+
+Motores de corrente alternada se subdividem em motores elétricos de indução e motores elétricos síncronos. Os síncronos utilizam alimentação CA no estator e alimentação CC no rotor, sendo necessário um agente externo para sua partida, os mesmos precisam atingir sua velocidade de rotação síncrona e então pode-se aplicar cargas. Nos motores de indução, temos um motor que funciona a partir de dois campos magnéticos girantes de estrutura e funcionamento simples, podendo ser eles motores de indução monofásicos ou polifásicos.
+
+\newpage
+\section{Fundamentação Teórica}\hspace{0pt}
+
+\subsection{Perdas e fluxo de potência}\hspace{0pt}
+
+Para acompanhar o fluxo de potência, nota-se que a potência de entrada de um motor de indução $P_{entrada}$ obedece equação clássica de transferência de potência em circuitos trifásicos. Após a entrada, ocorrem as primeiras na máquina, devido aos enrolamentos do estator (as perdas no cobre do estator $P_{CE}$). Então, certa quantidade de potência é perdida como histerese e por corrente parasita no estator ($P_{nucleo}$). A potência restante nesse ponto é transferida ao rotor da máquina através do entreferro entre o estator e o rotor. Essa potência é denominada potência de entreferro ($P_{EF}$) da máquina. Após a potência ser transferida ao rotor, uma parte dela é perdida como perdas no cobre do rotor $P_{CR}$ e o restante é convertido da forma elétrica para a forma mecânica ($P_{conv}$). Finalmente, as perdas por atrito e ventilação $P_{AV}$ e as perdas suplementares $P_{suplem}$ são subtraídas. A potência restante é a saída do motor $P_{saida}$. A imagem descreve o fluxo de potência através do diagrama.
+
+\begin{center}
+\captionsetup{type=figure}
+\caption{Diagrama do fluxo de potência de um motor de indução.}
+\includegraphics[scale=0.8]{fluxo.png}\label{fig:fluxo}
+\end{center}
+
+\subsection{Circuito equivalente}\hspace{0pt}
+
+O ensaio a vazio é realizado com o motor de indução sem carga no eixo, livre para girar sem conjugado contrário. Nesta situação, o escorregamento do motor será muito próximo de 0.
+
+Além disso, o baixo escorregamento devido a falta de carga irá abrir o circuito do rotor. Logo, o circuito equivalente no ensaio a vazio é dado conforme a figura a seguir.
+
+\begin{center}
+\captionsetup{type=figure}
+\caption{Circuito equivalente do MIT no ensaio a vazio.}
+\includegraphics[scale=0.8]{circuito.png}\label{fig:circuito}
+\end{center}
+
+Conforme o circuito equivalente apresentado, nota-se que as perdas no cobre são dadas por:
+
+\begin{equation}
+P_{CE,vz} = 3R_1 I_{\phi , vz}^2
+\end{equation}
+
+Além disso, conforme o diagrama de fluxo de potência apresentado previamente (Figura \ref{fig:fluxo} e tendo em mente que estamos em um ensaio a vazio, as perdas rotacionais são dadas por:
+
+\begin{equation}
+P_{rot} = P_{entrada} - P_{CE,vz}
+\end{equation}
+
+A partir dos valores medidos no experimento, podemos calcular o fator de potência a vazio da seguinte maneira:
+
+\begin{equation}
+FP_{vz} = \cos \phi_{vz} = \frac{P_{entrada}}{\sqrt{3}V_L I_L}
+\end{equation}
+
+Por fim, determinamos a reatância de magnetização do motor pela expressão:
+
+\begin{equation}
+X_m = I_m (\frac{V_{\phi ,vz} \phase{0^\circ}}{I_{\phi ,vz} \phase{-\phi_{vz}^\circ}}) - X_1
+\end{equation}
+
+\subsection{Determinação de R\textsubscript{1}}\hspace{0pt}
+
+No decorrer do experimento, será medido o valor da resistência entre os enrolamentos para que possamos determinar o valor de $R_1$ (Figura \ref{fig:circuito}). Para isso, precisamos primeiro considerar qual tipo de conexão estamos trabalhando. 
+
+\newpage
+Se o motor estiver ligado em $\Delta$, determinaremos o valor de $R_1$ da seguinte forma:
+
+\begin{center}
+\captionsetup{type=figure}
+\caption{Determinação de $R_1$ para conexão em $\Delta$.}
+\includegraphics[scale=0.8]{triangulo.png}\label{fig:triangulo}
+\end{center}
+
+\begin{equation}
+R_1 = \frac{3}{2}R_{medido}
+\end{equation}
+
+Para o motor ligado em $Y$, temos que:
+
+\begin{center}
+\captionsetup{type=figure}
+\caption{Determinação de $R_1$ para conexão em $Y$.}
+\includegraphics[scale=0.8]{estrela.png}\label{fig:estrela}
+\end{center}
+
+\begin{equation}
+R_1 = \frac{1}{2}R_{medido}
+\end{equation}
+
+\newpage
+\section{Experimento}\hspace{0pt}
+
+\subsection{Materiais Utilizados}
+
+\begin{itemize}
+\item 1 motor de indução trifásico;
+\item 1 varivolt trifásico;
+\item 1 voltímetro CA;
+\item 3 amperímetros CA;
+\item 2 wattímetros monofásicos;
+\item 1 multímetro digital.
+\end{itemize}
+
+\subsection{Esquema de ligação}
+
+\begin{center}
+\captionsetup{type=figure}
+\caption{Esquema teórico de ligação do experimento.}
+\includegraphics[scale=0.7]{esquema.png}\label{fig:esquema}
+\end{center}
+
+\newpage
+\begin{center}
+\captionsetup{type=figure}
+\caption{Esquema prático de ligação do experimento.}
+\includegraphics[scale=0.25]{esquema.jpeg}\label{fig:montagem}
+\end{center}
+
+
+Os dados nominais do motor (MIT) utilizado no experimento foram coletados a partir de sua placa de identificação e são demonstrados pela Tabela \ref{tab:dados} a seguir.
+
+\begin{scriptsize}
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\captionsetup{type=table}
+\caption{Dados nominais da placa de identificação do motor.}\vspace{2mm}
+\begin{tabular}{c|c|c|c|c|c}\label{tab:dados}
+\textbf{Potência [cv/W]} & \textbf{Velocidade [rpm]} & \textbf{Conexão} & \textbf{Tensão [V]} & \textbf{Corrente [A]} & \textbf{Frequência [Hz]}\\ \hline
+3/2,2k & 1720 & $\Delta$ & 220 & 8,85 & 60\\ \hline
+\end{tabular}
+\end{center}
+\end{scriptsize}
+
+\newpage
+\subsection{Resultados}\hspace{0pt}
+
+A partir do esquema acima, o experimento seguiu medindo-se as resistências entre cada enrolamento através do multímetro digital e os valores do ensaio a vazio (corrente de linha, tensão de linha e potência) através dos wattímetros, amperímetros e do voltímetro.
+
+Os resultados obtidos seguem nas Tabelas \ref{tab:resultados1} e \ref{tab:resultados2}.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\captionsetup{type=table}
+\caption{Valores medidos e calculados para determinação da resistência dos enrolamentos do estator.}\vspace{2mm}
+\begin{tabular}{c|c|c|c}\label{tab:resultados1}
+\textbf{Terminais} & \textbf{R\textsubscript{medido} [$\Omega$]} & \textbf{Média Aritmética [$\Omega$]} & \textbf{R\textsubscript{1} [$\Omega$]}\\ \hline
+AB & 1,50 & \multirow{3}{*}{1,57} & \multirow{3}{*}{2,35}\\ \cline{1-2}
+BC & 1,60 & &\\ \cline{1-2}
+CA & 1,60 & &
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+\begin{footnotesize}
+\renewcommand{\arraystretch}{1.5}
+\captionsetup{type=table}
+\caption{Dados obtidos através da medição dos instrumentos no ensaio a vazio.}\vspace{2mm}
+\begin{tabular}{c|c|c|c|c|c|c|c}\label{tab:resultados2}
+\multirow{2}{*}{\textbf{Tensão de linha [V]}} & \multicolumn{4}{c|}{\textbf{Correntes de linha [A]}} & \multicolumn{3}{c}{\textbf{Potências [W]}}\\ \cline{2-8}
+& \textbf{I\textsubscript{a} [A]} & \textbf{I\textsubscript{b} [A]} & \textbf{I\textsubscript{c} [A]} & \textbf{I\textsubscript{L - média} [A]} & \textbf{P\textsubscript{W1}} & \textbf{P\textsubscript{W2}} & \textbf{P\textsubscript{W1}+ P\textsubscript{W2}}\\ \hline
+220 & 4,00 & 4,20 & 4,20 & 4,13 & 520 & 380 & 140
+
+\end{tabular}
+\end{footnotesize}
+\end{center}
+
+
+\newpage
+
+\section{Exercícios}
+\renewcommand{\labelenumi}{$\textbf{\textcolor{Azul}{\arabic{enumi}.}}$}
+\renewcommand{\labelenumii}{$\textbf{\textcolor{Azul}{(\alph{enumii})}}$}
+\renewcommand{\labelitemi}{\textbf{+}}
+\begin{enumerate}
+\item Utilizando a equação das perdas no cobre do estador, temos que:
+
+\begin{align}
+\nonumber P_{CE,vz} = 3R_1 I_{\phi , vz}^2 = 3\cdot2,35\cdot2,38^2 = 40,08 \; W
+\end{align}
+
+\item Cálculo da potência de entrada:
+
+\begin{align}
+\nonumber P_{entrada} = P_{W_1} - P_{W_2} = 520 - 380 = 140 \; W
+\end{align}
+
+\item As perdas rotacionais são determinadas através da expressão a seguir:
+
+\begin{align}
+\nonumber P_{rot} = P_{entrada} - P_{CE,vz} = 140 - 40,08 = 99,92 \; W
+\end{align}
+
+\item Cálculo do fator de potência:
+
+\begin{align}
+\nonumber FP_{vz} = \frac{P_{entrada}}{\sqrt{3}V_L I_L} = \frac{140}{\sqrt{3}\cdot 220 \cdot 4,13} = 0,0889
+\end{align}
+
+O ângulo de fase é dado por:
+
+\begin{align}
+\nonumber \phi_{vz} = \cos ^{-1} FP_{vz} = \cos ^{-1} 0,0889 = 85^{\circ}
+\end{align}
+
+\item Cálculo da impedância equivalente:
+
+\begin{equation}
+\nonumber Z_{eq} = \frac{V_{\phi ,vz} \phase{0^\circ}}{I_{\phi ,vz} \phase{-\phi_{vz}}} = \frac{220}{2,38 \phase{-85^\circ}} = 8 + 92i \; \Omega
+\end{equation}
+
+\item As reatâncias de dispersão e magnetização somadas são a própria reatância do motor:
+
+\begin{equation}
+\nonumber X_1 + X_m = 92 \; \Omega
+\end{equation}
+
+
+
+\end{enumerate}
+
+\newpage
+\section{Conclusão}\hspace{0cm}
+
+Neste ensaio, foi possível aplicar os conceitos do ensaio a vazio em motores de indução trifásico e calcular os parâmetros de perdas e do fluxo de potência, conforme estudado previamente. Dessa forma, pudemos indicar experimentalmente tanto as perdas rotacionais do motor, compostas também pelas perdas do núcleo, quanto as suas reatâncias de magnetização e de dispersão. Além disso, foi demonstrado a aplicabilidade das fórmulas introduzidas neste método e consolidar os conhecimentos ao transcrever o modelo real do motor para um circuito elétrico matemático.
+
+
+
+
+\newpage
+\phantom{\cite{chapman}, \cite{weg}, \cite{citisystems}}
+\bibliographystyle{ieeetr}
+\addcontentsline{toc}{section}{Referências}
+\bibliography{ref}
+
+
+
+\end{document}

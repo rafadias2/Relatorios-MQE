@@ -1,0 +1,214 @@
+\documentclass[a4paper,12pt,oneside]{article}
+\usepackage[lmargin=3cm, tmargin=3cm, rmargin=2cm, rmargin=2cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{xcolor,calc}
+\usepackage{titlesec,blindtext,color}
+\usepackage[size=footnotesize,labelsep=endash]{caption}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{pslatex}
+\usepackage{verbatim}
+\usepackage{enumitem,xcolor}
+\usepackage[portuguese]{babel}
+% -----------------------------------------------------------------------------------------
+
+%\captionsetup[figure]{labelfont=bf} % Configura a palavra "Figura" das legendas das imagens em negrito
+%\captionsetup[table]{labelfont=bf}  % Configura a palavra "Tabela" das legendas das tabelas em negrito
+
+% -----------------------------------------------------------------------------------------
+
+\definecolor{Azul}{HTML}{00508F}    % Define a cor Azul
+\definecolor{gray75}{gray}{0.75}    % Define a cor Cinza
+\definecolor{Cinza}{HTML}{999999}   % Define uma segunda tonalidade de cinza
+
+% -----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+
+\hypersetup{%
+pdftitle={Relatório 1 - Máquinas Elétricas},%
+pdfauthor={Rafael Dias Pereira},%
+pdfsubject={MQE},%
+%pdfkeywords={Magnético, acoplados},%
+}%
+
+\onehalfspacing
+\graphicspath{{Imagens/}} % Especifica que todas as imagens estão dentro da sub-pasta "Imagens" 
+
+% -----------------------------------------------------------------------------------------
+
+\newcommand{\hsp}{\hspace{10pt}}
+\titleformat{\chapter}[hang]{\Huge\bfseries\color{Azul}}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
+\titleformat{\section}[hang]{\Huge\bfseries\color{Azul}}{\textcolor{gray75}{}}{0pt}{\Huge\bfseries}
+\titleformat{\subsection}[hang]{\large\bfseries\color{Azul}}{}{0pt}{\Large\bfseries}
+\titleformat*{\subsubsection}{\normalsize\bfseries\color{Azul}}
+
+
+% -----------------------------------------------------------------------------------------
+
+\DeclareMathOperator{\argmax}{arg\,max} % thin space, limits on side in displays
+
+% -----------------------------------------------------------------------------------------
+
+\begin{document}
+\thispagestyle{empty}\pagenumbering{alph}
+
+\begin{center}
+\begin{figure}\centering
+\includegraphics[scale=0.2]{Logo1.png}
+\end{figure}\*
+
+
+\vspace{5cm}
+
+{\Large\bfseries 
+Laboratório de Máquinas Elétricas}
+
+\vspace{0.5cm}
+
+{\Large\bfseries 
+Relatório 1}
+\end{center}
+
+\vspace{8cm}
+
+\noindent{\bfseries Aluno:} Ana Carolina Coelho Robl \hfill {\bfseries nº de matrícula:} 12011EAU021
+
+\noindent{\bfseries Aluno:} André Felipe da Cunha Garcia \hfill {\bfseries nº de matrícula:} 11611EAU006
+
+\noindent{\bfseries Aluno:} Rafael Dias Pereira \hfill {\bfseries nº de matrícula:} 11911EAU003
+
+\noindent{\bfseries Professor:} Augusto W. Fleury
+
+\vfill
+\begin{center}
+\large \today
+\end{center}
+
+
+
+\newpage
+\tableofcontents\newpage
+%\listoffigures\newpage
+%\listoftables\newpage
+\pagenumbering{arabic}
+
+\section{Objetivos}\hspace{0pt}
+
+Neste trabalho, estudaremos o motor de indução trifásico (MIT), amplamente utilizado no setor industrial. Para isso, será descrito os princípios e funções básicas de cada componente do MIT, bem como suas possibilidades de configuração e conexões para cada número de polos e terminais. No final, serão respondidas algumas questões referentes ao tema.
+
+\newpage
+\section{Introdução}\hspace{0pt}
+
+No que se trata de máquinas elétricas, denomina-se motor elétrico todo dispositivo capaz de transformar energia elétrica em energia mecânica, sendo um processo complexo onde se utiliza princípios do eletromagnetismo para seu acontecimento. A grosso modo, ao absorver uma certa quantidade de energia elétrica, em troca, o motor é capaz de mover ou acionar uma carga.
+
+Dentre os tipos de motores, o elétrico é o mais utilizado devido as suas diversas vantagens em relação aos demais, sendo elas seu baixo custo, fácil transporte, baixa ou nula emissão de poluentes, entrega de "força" em tempo muito reduzido (em relação ao motor a combustão por exemplo), baixo ruído, entre outras.
+
+Existem motores elétricos de corrente contínua (CC) e corrente alternada (CA). Nos motores CC, existe a necessidade de um circuito retificador para converter a tensão alternada para alimentar o mesmo, tendo a característica de um fácil ajuste de velocidade com limites amplos, resulta em uma aplicação mais restrita a casos especiais onde valha a pena (mesmo com seu custo mais elevado). Já nos motores CA, determina-se a velocidade através da frequência de tensão e corrente, onde a velocidade pode ser alterado apenas com a variação dessa frequência. Em resumo, os motores CA são os mais utilizados devido a seu baixo custo, simplicidade, economia e robustez, sendo o setor industrial seu principal utilizador. 
+
+Motores de corrente alternada se subdividem em motores elétricos de indução e motores elétricos síncronos. Os síncronos utilizam alimentação CA no estator e alimentação CC no rotor, sendo necessário um agente externo para sua partida, os mesmos precisam atingir sua velocidade de rotação síncrona e então pode-se aplicar cargas. Nos motores de indução, temos um motor que funciona a partir de dois campos magnéticos girantes de estrutura e funcionamento simples, podendo ser eles motores de indução monofásicos ou polifásicos.
+
+\newpage
+\section{Fundamentação Teórica}\hspace{0pt}
+
+Um motor de indução trifásico (MIT) pode ser subdividido em duas principais partes: \textbf{rotor} e \textbf{estator}. O rotor, que é a parte girante do motor, será constituída por um eixo e lâminas metálicas responsáveis por conduzir a corrente induzida pelo estator, provocando o giro. O estator, por sua vez, conduzirá a corrente alternada da rede elétrica e irá criar o campo magnético, responsável pela indução da corrente.
+
+\begin{center}
+\captionsetup{type=figure}
+\caption{Ilustração da montagem do motor elétrico (estator e rotor).}
+\includegraphics[scale=0.8]{estator.png}
+\end{center}
+
+\subsection{Estator}\hspace{0pt}
+
+O estator é formado por diversas ranhuras, onde serão postos os enrolamentos trifásicos da rede elétrica. Com isso, é gerado um campo magnético girante no entreferro, promovendo a sua interação com os condutores do rotor. A imagem \ref{fig:estator} representa sua configuração.
+
+\newpage
+\begin{center}
+\captionsetup{type=figure}
+\caption{Ilustração do estator.}
+\includegraphics[scale=0.6]{estator2.png}\label{fig:estator}
+\end{center}
+
+Para o seu funcionamento, é preciso seguir alguns requisitos fundamentais. São eles:
+
+\begin{enumerate}
+\item Alimentação trifásica com correntes defasadas de 120°no tempo;
+
+\item Conjunto de enrolamentos trifásicos defasados de 120°no espaço;
+\end{enumerate}
+
+\subsection{Rotor}\hspace{0pt}
+ 
+O rotor é construído por barras de alumínio curto-circuitadas nas extremidades, formando uma gaiola que é embutida em chapas de material ferromagnético. Os detalhes construtivos do estator e do rotor podem ser vistos na figura a seguir. 
+
+\newpage
+\begin{center}
+\captionsetup{type=figure}
+\caption{Ilustração do rotor.}
+\includegraphics[scale=0.6]{rotor.png}
+\end{center}
+
+O torque é gerado pelas forças magnéticas de atração e repulsão, desenvolvidas entre os polos magnéticos do rotor e do estator. Essas forças puxam e empurram os pólos móveis do rotor, produzindo os torques e fazendo o rotor girar rapidamente até que os atritos ligados ao eixo reduzam-no a zero.
+
+
+
+\newpage
+\section{Exercícios}
+
+\renewcommand{\labelenumi}{$\textbf{\textcolor{Azul}{\arabic{enumi}.}}$}
+\renewcommand{\labelenumii}{$\textbf{\textcolor{Azul}{(\alph{enumii})}}$}
+\renewcommand{\labelitemi}{\textbf{+}}
+
+\begin{enumerate}
+\item As duas principais partes do motor elétrico são: \textbf{rotor} e \textbf{estator}.
+
+\item Peças e suas respectivas funções:
+\begin{itemize}
+\item \textbf{Carcaça}: Proteção e acoplamento do motor.
+\item \textbf{Núcleo de chapas - estator e rotor}: restrição da área de circulação e diminuição das perdas por correntes parasitas.
+\item \textbf{Tampa}: vedar o motor.
+\item \textbf{Ventilador}: dissipação de calor por meio da refrigeração.
+\item \textbf{Tampa defletora}: direcionar o fluxo de ar axialmente nas aletas do motor.
+\item \textbf{Eixo}: girar mecanicamente o motor.
+\item \textbf{Enrolamento trifásico}: gerar o campo magnético.
+\item \textbf{Caixa de ligação e terminais}: unir e conectar os fios na energia elétrica.
+\item \textbf{Rolamentos}: distribuir a força motriz e proporcionar estabilidade na rotação do motor.
+\item \textbf{Barras e anéis de curto-circuito}: induzir corrente e curto-circuitar o rotor.
+\end{itemize}
+\item O material ferromagnético do rotor e do estator tem como objetivo direcionar o fluxo magnético. Além disso, sua estrutura é laminada para evitar as perdas por correntes parasitas.
+
+\item O número de polos do motor depende do espaço ocupado e a defasagem mecânica de cada bobina no estator. Conforme queremos aumentar o número de polos, a defasagem mecânica é reduzida e a quantidade de ranhuras do estator utilizada por cada fase é incrementada.
+
+\item As possíveis conexões para cada número de terminais são:
+\begin{itemize}
+\item \textbf{Motor de 3 terminais}: triângulo e estrela.
+\item \textbf{Motor de 9 terminais}: duplo triângulo, dupla estrela, triângulo e estrela.
+\item \textbf{Motor de 12 terminais}: duplo triângulo, dupla estrela, triângulo e estrela.
+\end{itemize}
+
+\end{enumerate}
+
+\newpage
+\section{Conclusão}\hspace{0cm}
+
+Em suma, podemos concluir que um estudo prévio e aprofundado sobre tais máquinas de amplo uso no setor industrial se faz necessário para o entendimento melhor do motor, conhecendo suas partições e suas funcionalidades. A partir da leitura e interpretação dos dados de placa, podemos determinais em quais situações a máquina elétrica pode realizar suas operações, o que torna mais fácil e seguro sua rotina de uso. Além disso, pudemos conferir sobre quais configurações atua um MIT, sendo elas duplo triângulo, dupla estrela, triângulo e estrela, considerando a quantidade terminais. 
+
+
+
+
+\newpage
+\phantom{\cite{chapman}, \cite{weg}}
+\bibliographystyle{ieeetr}
+\addcontentsline{toc}{section}{Referências}
+\bibliography{ref}
+
+
+
+\end{document}

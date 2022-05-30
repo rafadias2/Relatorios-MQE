@@ -1,0 +1,327 @@
+\documentclass[a4paper,12pt,oneside]{article}
+\usepackage[lmargin=3cm, tmargin=3cm, rmargin=2cm, rmargin=2cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{xcolor,calc}
+\usepackage{titlesec,blindtext,color}
+\usepackage[size=footnotesize,labelsep=endash]{caption}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{pslatex}
+\usepackage{verbatim}
+\usepackage{enumitem,xcolor}
+\usepackage[portuguese]{babel}
+% -----------------------------------------------------------------------------------------
+
+%\captionsetup[figure]{labelfont=bf} % Configura a palavra "Figura" das legendas das imagens em negrito
+%\captionsetup[table]{labelfont=bf}  % Configura a palavra "Tabela" das legendas das tabelas em negrito
+
+% -----------------------------------------------------------------------------------------
+
+\definecolor{Azul}{HTML}{00508F}    % Define a cor Azul
+\definecolor{gray75}{gray}{0.75}    % Define a cor Cinza
+\definecolor{Cinza}{HTML}{999999}   % Define uma segunda tonalidade de cinza
+
+% -----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+
+\hypersetup{%
+pdftitle={Relatório 2 - Máquinas Elétricas},%
+pdfauthor={Rafael Dias Pereira},%
+pdfsubject={MQE},%
+%pdfkeywords={Magnético, acoplados},%
+}%
+
+\onehalfspacing
+\graphicspath{{Imagens/}} % Especifica que todas as imagens estão dentro da sub-pasta "Imagens" 
+
+% -----------------------------------------------------------------------------------------
+
+\newcommand{\hsp}{\hspace{10pt}}
+\titleformat{\chapter}[hang]{\Huge\bfseries\color{Azul}}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
+\titleformat{\section}[hang]{\Huge\bfseries\color{Azul}}{\textcolor{gray75}{}}{0pt}{\Huge\bfseries}
+\titleformat{\subsection}[hang]{\large\bfseries\color{Azul}}{}{0pt}{\Large\bfseries}
+\titleformat*{\subsubsection}{\normalsize\bfseries\color{Azul}}
+
+
+% -----------------------------------------------------------------------------------------
+
+\DeclareMathOperator{\argmax}{arg\,max} % thin space, limits on side in displays
+
+% -----------------------------------------------------------------------------------------
+
+\begin{document}
+\thispagestyle{empty}\pagenumbering{alph}
+
+\begin{center}
+\begin{figure}\centering
+\includegraphics[scale=0.2]{Logo1.png}
+\end{figure}\*
+
+
+\vspace{5cm}
+
+{\Large\bfseries 
+Laboratório de Máquinas Elétricas}
+
+\vspace{0.5cm}
+
+{\Large\bfseries 
+Relatório 2}
+\end{center}
+
+\vspace{8cm}
+
+\noindent{\bfseries Aluno:} Ana Carolina Coelho Robl \hfill {\bfseries nº de matrícula:} 12011EAU021
+
+\noindent{\bfseries Aluno:} André Felipe da Cunha Garcia \hfill {\bfseries nº de matrícula:} 11611EAU006
+
+\noindent{\bfseries Aluno:} Rafael Dias Pereira \hfill {\bfseries nº de matrícula:} 11911EAU003
+
+\noindent{\bfseries Professor:} Augusto W. Fleury
+
+\vfill
+\begin{center}
+\large \today
+\end{center}
+
+
+
+\newpage
+\tableofcontents\newpage
+%\listoffigures\newpage
+%\listoftables\newpage
+\pagenumbering{arabic}
+
+\section{Objetivos}\hspace{0pt}
+
+Neste trabalho, estudaremos o motor de indução trifásico (MIT), amplamente utilizado no setor industrial. Para isso, será descrito os princípios e funções básicas de cada componente do MIT, bem como suas possibilidades de configuração e conexões para cada número de polos e terminais. No final, serão respondidas algumas questões referentes ao tema.
+
+\newpage
+\section{Introdução}\hspace{0pt}
+
+No que se trata de máquinas elétricas, denomina-se motor elétrico todo dispositivo capaz de transformar energia elétrica em energia mecânica, sendo um processo complexo onde se utiliza princípios do eletromagnetismo para seu acontecimento. A grosso modo, ao absorver uma certa quantidade de energia elétrica, em troca, o motor é capaz de mover ou acionar uma carga.
+
+Dentre os tipos de motores, o elétrico é o mais utilizado devido as suas diversas vantagens em relação aos demais, sendo elas seu baixo custo, fácil transporte, baixa ou nula emissão de poluentes, entrega de "força" em tempo muito reduzido (em relação ao motor a combustão por exemplo), baixo ruído, entre outras.
+
+Existem motores elétricos de corrente contínua (CC) e corrente alternada (CA). Nos motores CC, existe a necessidade de um circuito retificador para converter a tensão alternada para alimentar o mesmo, tendo a característica de um fácil ajuste de velocidade com limites amplos, resulta em uma aplicação mais restrita a casos especiais onde valha a pena (mesmo com seu custo mais elevado). Já nos motores CA, determina-se a velocidade através da frequência de tensão e corrente, onde a velocidade pode ser alterado apenas com a variação dessa frequência. Em resumo, os motores CA são os mais utilizados devido a seu baixo custo, simplicidade, economia e robustez, sendo o setor industrial seu principal utilizador. 
+
+Motores de corrente alternada se subdividem em motores elétricos de indução e motores elétricos síncronos. Os síncronos utilizam alimentação CA no estator e alimentação CC no rotor, sendo necessário um agente externo para sua partida, os mesmos precisam atingir sua velocidade de rotação síncrona e então pode-se aplicar cargas. Nos motores de indução, temos um motor que funciona a partir de dois campos magnéticos girantes de estrutura e funcionamento simples, podendo ser eles motores de indução monofásicos ou polifásicos.
+
+\newpage
+\section{Fundamentação Teórica}\hspace{0pt}
+
+Um motor de indução trifásico (MIT) pode ser subdividido em duas principais partes: \textbf{rotor} e \textbf{estator}. O rotor, que é a parte girante do motor, será constituída por um eixo e lâminas metálicas responsáveis por conduzir a corrente induzida pelo estator, provocando o giro. O estator, por sua vez, conduzirá a corrente alternada da rede elétrica e irá criar o campo magnético, responsável pela indução da corrente.
+
+\begin{center}
+\captionsetup{type=figure}
+\caption{Ilustração da montagem do motor elétrico (estator e rotor).}
+\includegraphics[scale=0.8]{estator.png}
+\end{center}
+
+\subsection{Estator}\hspace{0pt}
+
+O estator é formado por diversas ranhuras, onde serão postos os enrolamentos trifásicos da rede elétrica. Com isso, é gerado um campo magnético girante no entreferro, promovendo a sua interação com os condutores do rotor. A imagem \ref{fig:estator} representa sua configuração.
+
+\newpage
+\begin{center}
+\captionsetup{type=figure}
+\caption{Ilustração do estator.}
+\includegraphics[scale=0.6]{estator2.png}\label{fig:estator}
+\end{center}
+
+Para o seu funcionamento, é preciso seguir alguns requisitos fundamentais. São eles:
+
+\begin{enumerate}
+\item Alimentação trifásica com correntes defasadas de 120°no tempo;
+
+\item Conjunto de enrolamentos trifásicos defasados de 120°no espaço;
+\end{enumerate}
+
+\subsection{Rotor}\hspace{0pt}
+ 
+O rotor é construído por barras de alumínio curto-circuitadas nas extremidades, formando uma gaiola que é embutida em chapas de material ferromagnético. Os detalhes construtivos do estator e do rotor podem ser vistos na figura a seguir. 
+
+\newpage
+\begin{center}
+\captionsetup{type=figure}
+\caption{Ilustração do rotor.}
+\includegraphics[scale=0.6]{rotor.png}
+\end{center}
+
+O torque é gerado pelas forças magnéticas de atração e repulsão, desenvolvidas entre os polos magnéticos do rotor e do estator. Essas forças puxam e empurram os pólos móveis do rotor, produzindo os torques e fazendo o rotor girar rapidamente até que os atritos ligados ao eixo reduzam-no a zero.
+
+\subsection{Velocidade do Motor}\hspace{0pt}
+
+A velocidade em que o motor assíncrono gira pode ser interpretada como uma porcentagem da sua velocidade síncrona. A velocidade síncrona tem uma sincronia com a quantidade de polos e a frequência da rede. Os motores elétricos podem ser encontrados no mercado com diversos números de polos magnéticos, tais como 2, 4, 6, 8, 10, 12, etc. Os mais usuais são os de 2, 4, 6 e 8 polos. Acima de 12 polos são pouco utilizados e são encontrados só para algumas aplicações específicas.
+
+A velocidade síncrona de um motor elétrico é calculada com base na seguinte equação (Eq. \ref{eq:vs}):
+
+\begin{equation}\label{eq:vs}
+n_s = \frac{120f}{P}
+\end{equation}
+
+\begin{tabbing}
+onde:\= \\
+\> $n_s$ \= -- velocidade síncrona [$rpm$];\\
+\> $f$ \> -- frequência [$Hz$];\\
+\> $P$ \> -- número de polos.
+\end{tabbing}
+
+O campo magnético girante do rotor induz tensão devido ao movimento relativo que há entre o campo e o rotor. As correntes induzidas por essa tensão irão originar um segundo campo magnético, referente ao rotor. Conforme ocorre o alinhamento entre as velocidades dos dois campos, é produzido um torque (conjugado) eletromagnético na máquina, causando a rotação do motor. 
+
+A equação do escorregamento $s$ a seguir (Eq. \ref{eq:escorregamento}) descreve a diferença entre a velocidade síncrona e a velocidade do rotor:
+
+\begin{equation}\label{eq:escorregamento}
+s = \frac{n_m - n_s}{n_s}
+\end{equation}
+
+\begin{tabbing}
+onde:\= \\
+\> $s$ \= -- escorregamento;\\
+\> $n_m$ \> -- velocidade do motor [$rpm$];\\
+\> $n_s$ \> -- velocidade síncrona [$rpm$].
+\end{tabbing}
+
+Dessa forma, a velocidade do motor pode ser calculada em função do escorregamento, conforme a Equação \ref{eq:vm}:
+
+\begin{equation}\label{eq:vm}
+n_m = (1-s)n_s
+\end{equation}
+
+\newpage
+\section{Experimento}\hspace{0pt}
+
+\subsection{Materiais Utilizados}
+
+\begin{itemize}
+\item 1 motor de indução trifásico;
+\item 1 varivolt trifásico;
+\item 1 chave trifásica;
+\item 1 chave monofásica;
+\item 1 voltímetro CA;
+\item 3 amperímetros CA;
+\item 1 tacômetro digital;
+\item cabos diversos para conexões.
+\end{itemize}
+
+\subsection{Esquema de ligação}
+
+\begin{center}
+\captionsetup{type=figure}
+\caption{Esquema teórico de ligação do experimento.}
+\includegraphics[scale=0.7]{esquema.png}\label{fig:esquema}
+\end{center}
+
+\newpage
+\begin{center}
+\captionsetup{type=figure}
+\caption{Esquema prático de ligação do experimento.}
+\includegraphics[scale=0.25]{montagem.jpg}\label{fig:montagem}
+\end{center}
+
+
+Os dados nominais do motor (MIT) utilizado no experimento foram coletados a partir de sua placa de identificação e são demonstrados pela Tabela \ref{tab:dados} a seguir.
+
+\begin{scriptsize}
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\captionsetup{type=table}
+\caption{Dados nominais da placa de identificação do motor.}\vspace{2mm}
+\begin{tabular}{c|c|c|c|c|c}\label{tab:dados}
+\textbf{Potência [cv/W]} & \textbf{Velocidade [rpm]} & \textbf{Conexão} & \textbf{Tensão [V]} & \textbf{Corrente [A]} & \textbf{Frequência [Hz]}\\ \hline
+3/2,2k & 1720 & $\Delta$ & 220 & 8,85 & 60\\ \hline
+\end{tabular}
+\end{center}
+\end{scriptsize}
+
+\newpage
+\subsection{Resultados}
+
+\renewcommand{\labelenumi}{$\textbf{\textcolor{Azul}{\arabic{enumi}.}}$}
+
+A partir do esquema acima, o experimento se seguiu de duas principais formas, sendo elas:
+
+\begin{enumerate}
+\item Chave $S_2$ fechada;
+\item Chave $S_2$ aberta.
+\end{enumerate}
+
+
+Os resultados para cada situação estão nas Tabelas \ref{tab:resultados1} e \ref{tab:resultados2} a seguir.
+
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\captionsetup{type=table}
+\caption{Valores de tensão e corrente medidos pelos instrumentos com a chave $S_2$ fechada.}\vspace{2mm}
+\begin{tabular}{c|c|c|c|c|c}\label{tab:resultados1}
+\textbf{Tensão de linha [V]} & \textbf{I\textsubscript{a} [A]} & \textbf{I\textsubscript{b} [A]} & \textbf{I\textsubscript{c} [A]} & \textbf{I\textsubscript{L} - média [A]} & \textbf{Velocidade [rpm]}\\ \hline
+220 & 4,40 & 3,80 & 4,00 & 4,06 & 1798\\ \hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\captionsetup{type=table}
+\caption{Valores de tensão e corrente medidos pelos instrumentos com a chave $S_2$ aberta.}\vspace{2mm}
+\begin{tabular}{c|c|c|c|c|c}\label{tab:resultados2}
+\textbf{Tensão de linha [V]} & \textbf{I\textsubscript{a} [A]} & \textbf{I\textsubscript{b} [A]} & \textbf{I\textsubscript{c} [A]} & \textbf{I\textsubscript{L} - média [A]} & \textbf{Velocidade [rpm]}\\ \hline
+220 & 6,60 & 6,00 & 0,00 & 4,20 & 1796\\ \hline
+\end{tabular}
+\end{center}
+
+\newpage
+
+\section{Exercícios}
+\renewcommand{\labelenumi}{$\textbf{\textcolor{Azul}{\arabic{enumi}.}}$}
+\renewcommand{\labelenumii}{$\textbf{\textcolor{Azul}{(\alph{enumii})}}$}
+\renewcommand{\labelitemi}{\textbf{+}}
+\begin{enumerate}
+
+\item Devido ao fato de ele se comportar com uma máquina assíncrona, onde a velocidade de rotação do rotor é levemente mais baixa do que a velocidade de rotação do campo girante do estator.
+
+\item Pois quando a chave $S_2$ está aberta, a corrente $I_c$ passada para o motor se torna nula, assim sendo não teremos o conjunto de correntes trifásicas defasadas em 120$^{\deg}$ requeridas para a formação de um campo magnético girante, que é princípio básico do giro do motor, como visto na introdução teórica, então sua ausência explica a falta de partida do motor.
+
+\item A velocidade síncrona é dada por:
+\begin{align}
+n_s = \frac{120f}{P} = \frac{120\cdot 60}{4} = 1800 \; [rpm]
+\end{align}
+
+A velocidade do motor é menor que sua velocidade síncrona devido ao fato escorregamento, como visto na Equação \ref{eq:escorregamento}, e o fato de o motor estar operando com uma carga menor (4,06 A) que a sua carga nominal (8,85 A), explica a velocidade de saída maior que a nominal.
+
+\item O motor de indução trifásico funciona através de um fluxo magnético induzido, ao se remover uma fase ainda há presença de um fluxo magnético mas de forma desbalanceada, causando vibrações e reduzindo a eficiência.
+
+\item Faltando uma fase o motor procura continuar fornecendo o mesmo conjugado anterior, ocasionando assim elevação da corrente de alimentação. Portanto, as fases restantes irão elevar seu nível de corrente na tentativa de manter a potência fornecida, resultando em maiores perdas, aquecimentos e redução da velocidade.
+
+\item O que ocorre ao se inverter duas fases da tensão de alimentação, é que estamos invertendo a alimentação do estator, ocasionando a inversão do sentindo de rotação do campo girante, logo, o sentido de rotação do motor.
+
+
+\end{enumerate}
+
+\newpage
+\section{Conclusão}\hspace{0cm}
+
+Em suma, podemos concluir que existe uma relação direta na alimentação do estator do motor com o estado final do rotor. Dessa forma, vimos que o funcionamento do rotor foi comprometido quando removemos uma das fases da alimentação, apresentando ruídos e instabilidade no giro. 
+
+Além disso, percebemos que o resultado da velocidade (rpm) do motor não foi equivalente ao apresentado por sua placa de identificação, tendo em vista que o valor obtido foi superior ao esperado nominalmente. A explicação ponderada pelo grupo foi porque o motor não estava operando com a sua corrente nominal, o que resulta numa velocidade de saída ligeiramente maior que a velocidade do motor.
+
+
+
+
+\newpage
+\phantom{\cite{chapman}, \cite{weg}, \cite{citisystems}}
+\bibliographystyle{ieeetr}
+\addcontentsline{toc}{section}{Referências}
+\bibliography{ref}
+
+
+
+\end{document}
